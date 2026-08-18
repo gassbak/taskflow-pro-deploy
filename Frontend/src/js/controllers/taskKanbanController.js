@@ -1,417 +1,53 @@
 /**
  * taskKanbanController.js
  * -------------------------
- * Regroupe tout ce qui concerne les TÂCHES et le KANBAN à l'intérieur
- * d'un projet : affichage des cartes, création/édition de tâche,
- * changement de statut (select), glisser-déposer et compteurs.
- *
- * Ces méthodes sont écrites comme un objet "mixin" : elles sont ensuite
- * copiées sur ProjectController.prototype (voir projectController.js),
- * donc `this` fait toujours référence à l'instance de ProjectController
- * (this.taskService, this.service, etc. restent accessibles normalement).
- *
- * NOTE (correction appliquée) : createProjectTaskPreview() était définie
- * deux fois dans l'ancien fichier. La version qui gagnait avait perdu
- * l'attribut draggable="true" et la classe "task-card" en cours de route,
- * ce qui empêchait les cartes d'être détectées et déplacées. La classe et
- * l'attribut ont été remis ici, et la valeur de statut "inprogress" a été
- * harmonisée en "in_progress" pour rester cohérente avec le glisser-déposer.
+ * Gestion des tâches et du Kanban :
+ * - affichage des tâches
+ * - modification
+ * - suppression
+ * - changement de statut
+ * - drag & drop
+ * - compteurs
  */
+
 export const taskKanbanMixin = {
 
     /**
-     * Attache les événements des cartes tâches : changement de statut (select), modifier, supprimer.
-     */
-    bindTaskActionEvents(project) {
-
-        /*
-         * ============================
-         * DRAG & DROP
-         * ============================
-         */
-
-
-        const taskCards =
-            document.querySelectorAll(
-                ".task-card"
-            );
-
-
-        taskCards.forEach(card => {
-
-            /*
-             * Début du déplacement
-             */
-
-            card.addEventListener(
-                "dragstart",
-                event => {
-
-                    const taskId =
-                        card.dataset.taskId;
-
-
-                    event.dataTransfer.setData(
-                        "text/plain",
-                        taskId
-                    );
-
-
-                    event.dataTransfer.effectAllowed =
-                        "move";
-
-
-                    card.classList.add(
-                        "opacity-50"
-                    );
-
-                }
-            );
-
-
-            /*
-             * Fin du déplacement
-             */
-
-            card.addEventListener(
-                "dragend",
-                () => {
-
-                    card.classList.remove(
-                        "opacity-50"
-                    );
-
-                }
-            );
-
-        });
-
-
-        /*
-         * Zones de dépôt
-         */
-
-        const dropZones =
-            document.querySelectorAll(
-                ".task-drop-zone"
-            );
-
-
-        dropZones.forEach(zone => {
-
-            /*
-             * Autoriser le dépôt
-             */
-
-            zone.addEventListener(
-                "dragover",
-                event => {
-
-                    event.preventDefault();
-
-
-                    event.dataTransfer.dropEffect =
-                        "move";
-
-
-                    zone.classList.add(
-                        "ring-2",
-                        "ring-blue-400"
-                    );
-
-                }
-            );
-
-
-            /*
-             * Retirer l'indication visuelle
-             */
-
-            zone.addEventListener(
-                "dragleave",
-                () => {
-
-                    zone.classList.remove(
-                        "ring-2",
-                        "ring-blue-400"
-                    );
-
-                }
-            );
-
-
-            /*
-             * Déposer la tâche
-             */
-
-            zone.addEventListener(
-                "drop",
-                event => {
-
-                    event.preventDefault();
-
-
-                    zone.classList.remove(
-                        "ring-2",
-                        "ring-blue-400"
-                    );
-
-
-                    const taskId =
-                        event.dataTransfer.getData(
-                            "text/plain"
-                        );
-
-
-                    if (!taskId) {
-
-                        return;
-
-                    }
-
-
-                    /*
-                     * Déterminer le nouveau statut
-                     */
-
-                    let newStatus =
-                        "todo";
-
-
-                    if (
-                        zone.id ===
-                        "inprogress-tasks"
-                    ) {
-
-                        newStatus =
-                            "inprogress";
-
-                    }
-
-
-                    else if (
-                        zone.id ===
-                        "done-tasks"
-                    ) {
-
-                        newStatus =
-                            "done";
-
-                    }
-
-
-                    /*
-                     * Mettre à jour la tâche
-                     */
-
-                    const updatedTask =
-                        this.taskService.updateTask(
-                            taskId,
-                            {
-                                status:
-                                    newStatus
-                            }
-                        );
-
-
-                    if (!updatedTask) {
-
-                        alert(
-                            "Impossible de déplacer la tâche."
-                        );
-
-                        return;
-
-                    }
-
-
-                    console.log(
-                        "Tâche déplacée :",
-                        updatedTask
-                    );
-
-
-                    /*
-                     * Rafraîchir le Kanban
-                     */
-
-                    this.renderProjectTasks(
-                        project
-                    );
-
-                }
-            );
-
-        });
-
-
-        /*
-         * ============================
-         * CHANGEMENT DE STATUT
-         * ============================
-         */
-
-        document
-            .querySelectorAll(".task-status")
-            .forEach(select => {
-
-                select.addEventListener(
-                    "change",
-                    () => {
-
-                        const taskId =
-                            select.dataset.taskId;
-
-
-                        const newStatus =
-                            select.value;
-
-
-                        const updatedTask =
-                            this.taskService.updateTask(
-                                taskId,
-                                {
-                                    status:
-                                        newStatus
-                                }
-                            );
-
-
-                        if (!updatedTask) {
-
-                            alert(
-                                "Impossible de modifier le statut."
-                            );
-
-                            return;
-
-                        }
-
-
-                        console.log(
-                            "Statut modifié :",
-                            updatedTask
-                        );
-
-
-                        this.renderProjectTasks(
-                            project
-                        );
-
-                    }
-                );
-
-            });
-
-
-        /*
-         * ============================
-         * SUPPRESSION
-         * ============================
-         */
-
-        document
-            .querySelectorAll(".delete-task")
-            .forEach(button => {
-
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        const taskId =
-                            button.dataset.taskId;
-
-
-                        const confirmation =
-                            confirm(
-                                "Voulez-vous vraiment supprimer cette tâche ?"
-                            );
-
-
-                        if (!confirmation) {
-
-                            return;
-
-                        }
-
-
-                        const deleted =
-                            this.taskService.deleteTask(
-                                taskId
-                            );
-
-
-                        if (!deleted) {
-
-                            alert(
-                                "Impossible de supprimer la tâche."
-                            );
-
-                            return;
-
-                        }
-
-
-                        console.log(
-                            "Tâche supprimée :",
-                            taskId
-                        );
-
-
-                        this.renderProjectTasks(
-                            project
-                        );
-
-                    }
-                );
-
-            });
-
-
-        /*
-         * ============================
-         * MODIFICATION
-         * ============================
-         */
-
-        document
-            .querySelectorAll(".edit-task")
-            .forEach(button => {
-
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        const taskId =
-                            button.dataset.taskId;
-
-
-                        this.openEditTaskModal(
-                            taskId,
-                            project
-                        );
-
-                    }
-                );
-
-            });
-
-    },
-
-    /**
-     * Construit le HTML d'une carte tâche du Kanban (avec draggable + classe task-card).
+     * ============================================================
+     * AFFICHAGE D'UNE CARTE DE TÂCHE
+     * ============================================================
      */
     createProjectTaskPreview(task) {
 
         const priorityLabels = {
 
             low: "Faible",
-
             medium: "Moyenne",
-
-            high: "Haute"
+            high: "Haute",
+            urgent: "Urgente"
 
         };
+
+
+        /*
+         * Compatibilité avec les anciens statuts
+         */
+        let normalizedStatus =
+            task.status;
+
+        if (task.status === "progress") {
+
+            normalizedStatus =
+                "in_progress";
+
+        }
+
+        else if (task.status === "completed") {
+
+            normalizedStatus =
+                "done";
+
+        }
 
 
         return `
@@ -423,18 +59,20 @@ export const taskKanbanMixin = {
                     rounded-xl
                     border
                     border-slate-200
+                    bg-white
                     p-4
                     transition
                     hover:bg-slate-50
                     active:cursor-grabbing
                     dark:border-slate-800
+                    dark:bg-slate-950
                     dark:hover:bg-slate-800/50
                 "
                 draggable="true"
                 data-task-id="${task.id}"
             >
 
-                <!-- Partie principale -->
+                <!-- CONTENU PRINCIPAL -->
 
                 <div
                     class="
@@ -447,7 +85,7 @@ export const taskKanbanMixin = {
 
                     <div class="min-w-0 flex-1">
 
-                        <!-- Titre -->
+                        <!-- TITRE -->
 
                         <h3
                             class="
@@ -462,7 +100,7 @@ export const taskKanbanMixin = {
                         </h3>
 
 
-                        <!-- Description -->
+                        <!-- DESCRIPTION -->
 
                         ${
                             task.description
@@ -484,7 +122,7 @@ export const taskKanbanMixin = {
                         }
 
 
-                        <!-- Statut + priorité -->
+                        <!-- STATUT + PRIORITÉ -->
 
                         <div
                             class="
@@ -496,7 +134,7 @@ export const taskKanbanMixin = {
                             "
                         >
 
-                            <!-- Sélecteur de statut -->
+                            <!-- SELECT STATUT -->
 
                             <select
                                 class="
@@ -524,7 +162,7 @@ export const taskKanbanMixin = {
                                 <option
                                     value="todo"
                                     ${
-                                        task.status === "todo"
+                                        normalizedStatus === "todo"
                                             ? "selected"
                                             : ""
                                     }
@@ -532,12 +170,10 @@ export const taskKanbanMixin = {
                                     À faire
                                 </option>
 
-
                                 <option
                                     value="in_progress"
                                     ${
-                                        task.status === "in_progress" ||
-                                        task.status === "inprogress"
+                                        normalizedStatus === "in_progress"
                                             ? "selected"
                                             : ""
                                     }
@@ -545,11 +181,10 @@ export const taskKanbanMixin = {
                                     En cours
                                 </option>
 
-
                                 <option
                                     value="done"
                                     ${
-                                        task.status === "done"
+                                        normalizedStatus === "done"
                                             ? "selected"
                                             : ""
                                     }
@@ -560,7 +195,7 @@ export const taskKanbanMixin = {
                             </select>
 
 
-                            <!-- Priorité -->
+                            <!-- PRIORITÉ -->
 
                             ${
                                 task.priority
@@ -593,7 +228,7 @@ export const taskKanbanMixin = {
                     </div>
 
 
-                    <!-- Deadline -->
+                    <!-- DEADLINE -->
 
                     <div
                         class="
@@ -614,7 +249,7 @@ export const taskKanbanMixin = {
                 </div>
 
 
-                <!-- Actions -->
+                <!-- ACTIONS -->
 
                 <div
                     class="
@@ -625,7 +260,7 @@ export const taskKanbanMixin = {
                     "
                 >
 
-                    <!-- Modifier -->
+                    <!-- MODIFIER -->
 
                     <button
                         type="button"
@@ -651,7 +286,7 @@ export const taskKanbanMixin = {
                     </button>
 
 
-                    <!-- Supprimer -->
+                    <!-- SUPPRIMER -->
 
                     <button
                         type="button"
@@ -680,133 +315,272 @@ export const taskKanbanMixin = {
 
     },
 
+
     /**
-     * Ouvre le modal de création d'une tâche pour un projet donné.
+     * ============================================================
+     * ÉVÉNEMENTS DES TÂCHES
+     * ============================================================
      */
-    openCreateTaskModal(project) {
+    bindTaskActionEvents(project) {
 
-        const modal =
-            document.getElementById("task-modal");
+        const kanban =
+            document.getElementById(
+                "project-kanban"
+            );
 
-        if (!modal) {
+
+        if (!kanban) {
 
             console.error(
-                "Le formulaire de tâche est introuvable."
+                "Conteneur #project-kanban introuvable."
             );
 
             return;
+
         }
 
-        modal.classList.remove("hidden");
 
-        modal.dataset.projectId =
-            project.id;
-
-    },
-
-    /**
-     * Attache l'événement de soumission du formulaire de création de tâche.
-     */
-    bindTaskFormEvents(project) {
-
-        const form =
-            document.getElementById("task-form");
-
-        const modal =
-            document.getElementById("task-modal");
-
-        const closeButton =
-            document.getElementById("close-task-modal");
-
-        const cancelButton =
-            document.getElementById("cancel-task-modal");
-
-
-        if (!form) {
-
-            console.error(
-                "Le formulaire #task-form est introuvable."
-            );
+        /*
+         * Éviter plusieurs branchements.
+         */
+        if (
+            kanban.dataset.eventsBound === "true"
+        ) {
 
             return;
+
         }
 
 
-        form.addEventListener(
-            "submit",
+        kanban.dataset.eventsBound =
+            "true";
+
+
+        /*
+         * ========================================================
+         * MODIFIER / SUPPRIMER
+         * ========================================================
+         */
+
+        kanban.addEventListener(
+            "click",
             (event) => {
 
-                event.preventDefault();
+                /*
+                 * MODIFIER
+                 */
+
+                const editButton =
+                    event.target.closest(
+                        ".edit-task"
+                    );
 
 
-                const formData =
-                    new FormData(form);
+                if (editButton) {
+
+                    const taskId =
+                        editButton.dataset.taskId;
 
 
-                const title =
-                    formData
-                        .get("title")
-                        ?.toString()
-                        .trim();
+                    if (!taskId) {
+
+                        console.error(
+                            "ID de tâche manquant pour la modification."
+                        );
+
+                        return;
+
+                    }
 
 
-                if (!title) {
+                    console.log(
+                        "MODIFICATION TÂCHE :",
+                        taskId
+                    );
 
-                    alert(
-                        "Le titre de la tâche est obligatoire."
+
+                    this.openEditTaskModal(
+                        taskId,
+                        project
+                    );
+
+
+                    return;
+
+                }
+
+
+                /*
+                 * SUPPRIMER
+                 */
+
+                const deleteButton =
+                    event.target.closest(
+                        ".delete-task"
+                    );
+
+
+                if (deleteButton) {
+
+                    const taskId =
+                        deleteButton.dataset.taskId;
+
+
+                    if (!taskId) {
+
+                        console.error(
+                            "ID de tâche manquant pour la suppression."
+                        );
+
+                        return;
+
+                    }
+
+
+                    const confirmation =
+                        confirm(
+                            "Voulez-vous vraiment supprimer cette tâche ?"
+                        );
+
+
+                    if (!confirmation) {
+
+                        return;
+
+                    }
+
+
+                    const deleted =
+                        this.taskService.deleteTask(
+                            taskId
+                        );
+
+
+                    if (!deleted) {
+
+                        alert(
+                            "Impossible de supprimer la tâche."
+                        );
+
+                        return;
+
+                    }
+
+
+                    console.log(
+                        "Tâche supprimée :",
+                        taskId
+                    );
+
+
+                    this.renderProjectTasks(
+                        project
+                    );
+
+                }
+
+            }
+        );
+
+
+        /*
+         * ========================================================
+         * CHANGEMENT DE STATUT VIA SELECT
+         * ========================================================
+         */
+
+        kanban.addEventListener(
+            "change",
+            (event) => {
+
+                const select =
+                    event.target.closest(
+                        ".task-status"
+                    );
+
+
+                if (!select) {
+
+                    return;
+
+                }
+
+
+                const taskId =
+                    select.dataset.taskId;
+
+
+                const newStatus =
+                    select.value;
+
+
+                if (!taskId) {
+
+                    console.error(
+                        "ID de tâche manquant."
                     );
 
                     return;
+
                 }
 
 
-                const task =
-                    this.taskService.createTask({
+                const allowedStatuses = [
+                    "todo",
+                    "in_progress",
+                    "done"
+                ];
 
-                        projectId:
-                            project.id,
 
-                        title:
-                            title,
+                if (
+                    !allowedStatuses.includes(
+                        newStatus
+                    )
+                ) {
 
-                        description:
-                            formData
-                                .get("description")
-                                ?.toString()
-                                .trim() || "",
+                    console.error(
+                        "Statut invalide :",
+                        newStatus
+                    );
 
-                        priority:
-                            formData
-                                .get("priority")
-                                ?.toString() || "medium",
+                    return;
 
-                        deadline:
-                            formData
-                                .get("deadline")
-                                ?.toString() || null,
-
-                        status:
-                            "todo"
-
-                    });
+                }
 
 
                 console.log(
-                    "Tâche créée :",
-                    task
+                    "CHANGEMENT DE STATUT :",
+                    taskId,
+                    "→",
+                    newStatus
                 );
 
 
-                form.reset();
-
-
-                if (modal) {
-
-                    modal.classList.add(
-                        "hidden"
+                const updatedTask =
+                    this.taskService.updateTask(
+                        taskId,
+                        {
+                            status:
+                                newStatus
+                        }
                     );
 
+
+                if (!updatedTask) {
+
+                    alert(
+                        "Impossible de modifier le statut."
+                    );
+
+                    return;
+
                 }
+
+
+                console.log(
+                    "Tâche mise à jour :",
+                    updatedTask
+                );
 
 
                 this.renderProjectTasks(
@@ -817,51 +591,349 @@ export const taskKanbanMixin = {
         );
 
 
-        if (closeButton) {
+        /*
+         * ========================================================
+         * DRAG START
+         * ========================================================
+         */
 
-            closeButton.addEventListener(
-                "click",
-                () => {
+        kanban.addEventListener(
+            "dragstart",
+            (event) => {
 
-                    modal.classList.add(
-                        "hidden"
+                const card =
+                    event.target.closest(
+                        ".task-card"
+                    );
+
+
+                if (!card) {
+
+                    return;
+
+                }
+
+
+                const taskId =
+                    card.dataset.taskId;
+
+
+                if (!taskId) {
+
+                    console.error(
+                        "ID de tâche absent."
+                    );
+
+                    return;
+
+                }
+
+
+                console.log(
+                    "DRAG START :",
+                    taskId
+                );
+
+
+                event.dataTransfer.setData(
+                    "text/plain",
+                    taskId
+                );
+
+
+                event.dataTransfer.effectAllowed =
+                    "move";
+
+
+                card.classList.add(
+                    "opacity-50"
+                );
+
+            }
+        );
+
+
+        /*
+         * ========================================================
+         * DRAG END
+         * ========================================================
+         */
+
+        kanban.addEventListener(
+            "dragend",
+            (event) => {
+
+                const card =
+                    event.target.closest(
+                        ".task-card"
+                    );
+
+
+                if (card) {
+
+                    card.classList.remove(
+                        "opacity-50"
                     );
 
                 }
-            );
-
-        }
 
 
-        if (cancelButton) {
+                kanban
+                    .querySelectorAll(
+                        ".task-drop-zone"
+                    )
+                    .forEach(zone => {
 
-            cancelButton.addEventListener(
-                "click",
-                () => {
+                        zone.classList.remove(
+                            "ring-2",
+                            "ring-blue-400"
+                        );
 
-                    modal.classList.add(
-                        "hidden"
+                    });
+
+            }
+        );
+
+
+        /*
+         * ========================================================
+         * DRAG OVER
+         * ========================================================
+         */
+
+        kanban.addEventListener(
+            "dragover",
+            (event) => {
+
+                const zone =
+                    event.target.closest(
+                        ".task-drop-zone"
+                    );
+
+
+                if (!zone) {
+
+                    return;
+
+                }
+
+
+                event.preventDefault();
+
+
+                event.dataTransfer.dropEffect =
+                    "move";
+
+
+                zone.classList.add(
+                    "ring-2",
+                    "ring-blue-400"
+                );
+
+            }
+        );
+
+
+        /*
+         * ========================================================
+         * DRAG LEAVE
+         * ========================================================
+         */
+
+        kanban.addEventListener(
+            "dragleave",
+            (event) => {
+
+                const zone =
+                    event.target.closest(
+                        ".task-drop-zone"
+                    );
+
+
+                if (!zone) {
+
+                    return;
+
+                }
+
+
+                if (
+                    !zone.contains(
+                        event.relatedTarget
+                    )
+                ) {
+
+                    zone.classList.remove(
+                        "ring-2",
+                        "ring-blue-400"
                     );
 
                 }
-            );
 
-        }
+            }
+        );
+
+
+        /*
+         * ========================================================
+         * DROP
+         * ========================================================
+         */
+
+        kanban.addEventListener(
+            "drop",
+            (event) => {
+
+                event.preventDefault();
+
+
+                const zone =
+                    event.target.closest(
+                        ".task-drop-zone"
+                    );
+
+
+                if (!zone) {
+
+                    return;
+
+                }
+
+
+                zone.classList.remove(
+                    "ring-2",
+                    "ring-blue-400"
+                );
+
+
+                const taskId =
+                    event.dataTransfer.getData(
+                        "text/plain"
+                    );
+
+
+                if (!taskId) {
+
+                    console.error(
+                        "Aucun ID de tâche récupéré."
+                    );
+
+                    return;
+
+                }
+
+
+                let newStatus =
+                    null;
+
+
+                if (
+                    zone.id === "todo-tasks"
+                ) {
+
+                    newStatus =
+                        "todo";
+
+                }
+
+                else if (
+                    zone.id === "inprogress-tasks"
+                ) {
+
+                    newStatus =
+                        "in_progress";
+
+                }
+
+                else if (
+                    zone.id === "done-tasks"
+                ) {
+
+                    newStatus =
+                        "done";
+
+                }
+
+
+                if (!newStatus) {
+
+                    console.error(
+                        "Zone Kanban inconnue :",
+                        zone.id
+                    );
+
+                    return;
+
+                }
+
+
+                console.log(
+                    "DROP :",
+                    taskId,
+                    "→",
+                    newStatus
+                );
+
+
+                const updatedTask =
+                    this.taskService.updateTask(
+                        taskId,
+                        {
+                            status:
+                                newStatus
+                        }
+                    );
+
+
+                if (!updatedTask) {
+
+                    alert(
+                        "Impossible de déplacer la tâche."
+                    );
+
+                    return;
+
+                }
+
+
+                console.log(
+                    "TÂCHE DÉPLACÉE :",
+                    updatedTask
+                );
+
+
+                this.renderProjectTasks(
+                    project
+                );
+
+            }
+        );
+
+
+        console.log(
+            "Événements Kanban activés."
+        );
 
     },
 
+
     /**
-     * Ouvre une édition simple (via prompt) d'une tâche existante.
+     * ============================================================
+     * MODIFICATION D'UNE TÂCHE
+     * ============================================================
      */
     openEditTaskModal(taskId, project) {
 
         const tasks =
             this.taskService.getAllTasks();
 
+
         const task =
             tasks.find(
-                item => item.id === taskId
+                item =>
+                    item.id === taskId
             );
+
 
         if (!task) {
 
@@ -905,12 +977,41 @@ export const taskKanbanMixin = {
 
         const priority =
             prompt(
-                "Priorité (low, medium, high) :",
+                "Priorité (low, medium, high, urgent) :",
                 task.priority || "medium"
             );
 
 
         if (priority === null) {
+
+            return;
+
+        }
+
+
+        const allowedPriorities = [
+            "low",
+            "medium",
+            "high",
+            "urgent"
+        ];
+
+
+        const cleanPriority =
+            priority
+                .trim()
+                .toLowerCase();
+
+
+        if (
+            !allowedPriorities.includes(
+                cleanPriority
+            )
+        ) {
+
+            alert(
+                "Priorité invalide. Utilisez : low, medium, high ou urgent."
+            );
 
             return;
 
@@ -943,7 +1044,7 @@ export const taskKanbanMixin = {
                         description.trim(),
 
                     priority:
-                        priority.trim(),
+                        cleanPriority,
 
                     deadline:
                         deadline.trim() || null
@@ -975,97 +1076,73 @@ export const taskKanbanMixin = {
 
     },
 
+
     /**
-     * Active le glisser-déposer des cartes entre les 3 colonnes du Kanban.
+     * ============================================================
+     * INITIALISATION DU KANBAN
+     * ============================================================
      */
     initKanbanDragAndDrop(project) {
 
-        const dropZones =
-            document.querySelectorAll(".task-drop-zone");
-
         console.log(
-            "ZONES KANBAN TROUVÉES :",
-            dropZones.length
+            "Initialisation du Kanban..."
         );
 
-        if (!dropZones.length) {
 
-            console.warn(
-                "Aucune zone Kanban trouvée."
+        const kanban =
+            document.getElementById(
+                "project-kanban"
+            );
+
+
+        if (!kanban) {
+
+            console.error(
+                "Conteneur #project-kanban introuvable."
             );
 
             return;
+
         }
 
-        dropZones.forEach(zone => {
 
-            zone.addEventListener(
-                "dragover",
-                (event) => {
-
-                    event.preventDefault();
-
-                }
+        const zones =
+            kanban.querySelectorAll(
+                ".task-drop-zone"
             );
 
-            zone.addEventListener(
-                "drop",
-                async (event) => {
 
-                    event.preventDefault();
+        console.log(
+            "ZONES KANBAN TROUVÉES :",
+            zones.length
+        );
 
-                    const taskId =
-                        event.dataTransfer.getData(
-                            "text/plain"
-                        );
 
-                    if (!taskId) {
+        if (zones.length !== 3) {
 
-                        console.warn(
-                            "Aucun ID de tâche récupéré."
-                        );
-
-                        return;
-                    }
-
-                    const newStatus =
-                        zone.id === "todo-tasks"
-                            ? "todo"
-                            : zone.id === "inprogress-tasks"
-                                ? "in_progress"
-                                : zone.id === "done-tasks"
-                                    ? "done"
-                                    : null;
-
-                    if (!newStatus) {
-
-                        console.warn(
-                            "Statut inconnu pour :",
-                            zone.id
-                        );
-
-                        return;
-                    }
-
-                    console.log(
-                        "TÂCHE DÉPLACÉE :",
-                        taskId
-                    );
-
-                    console.log(
-                        "NOUVEAU STATUT :",
-                        newStatus
-                    );
-
-                }
+            console.warn(
+                "Le Kanban devrait contenir 3 zones."
             );
 
-        });
+        }
+
+
+        /*
+         * Les événements sont centralisés
+         * dans bindTaskActionEvents().
+         */
+
+        this.bindTaskActionEvents(
+            project
+        );
 
     },
 
+
     /**
-     * Récupère les tâches du projet, les répartit dans les 3 colonnes et met à jour les compteurs.
+     * ============================================================
+     * RENDU DU KANBAN
+     * ============================================================
      */
     renderProjectTasks(project) {
 
@@ -1073,15 +1150,18 @@ export const taskKanbanMixin = {
             "=== RENDU DES TÂCHES DU PROJET ==="
         );
 
+
         const todoContainer =
             document.getElementById(
                 "todo-tasks"
             );
 
+
         const inProgressContainer =
             document.getElementById(
                 "inprogress-tasks"
             );
+
 
         const doneContainer =
             document.getElementById(
@@ -1105,7 +1185,7 @@ export const taskKanbanMixin = {
 
 
         /*
-         * Récupérer les tâches du projet
+         * Récupérer les tâches
          */
 
         const tasks =
@@ -1124,58 +1204,108 @@ export const taskKanbanMixin = {
          * Nettoyer les colonnes
          */
 
-        todoContainer.innerHTML = "";
-        inProgressContainer.innerHTML = "";
-        doneContainer.innerHTML = "";
+        todoContainer.innerHTML =
+            "";
+
+        inProgressContainer.innerHTML =
+            "";
+
+        doneContainer.innerHTML =
+            "";
 
 
         /*
          * Afficher les tâches
          */
 
-        tasks.forEach(task => {
+        tasks.forEach(
+            task => {
 
-            const taskHTML =
-                this.createProjectTaskPreview(
-                    task
-                );
+                /*
+                 * Compatibilité avec les
+                 * anciennes valeurs du localStorage.
+                 */
+
+                let status =
+                    task.status;
 
 
-            if (task.status === "todo") {
+                if (
+                    status === "progress"
+                ) {
 
-                todoContainer.insertAdjacentHTML(
-                    "beforeend",
-                    taskHTML
-                );
+                    status =
+                        "in_progress";
+
+                }
+
+                else if (
+                    status === "completed"
+                ) {
+
+                    status =
+                        "done";
+
+                }
+
+
+                const taskHTML =
+                    this.createProjectTaskPreview(
+                        task
+                    );
+
+
+                if (
+                    status === "todo"
+                ) {
+
+                    todoContainer.insertAdjacentHTML(
+                        "beforeend",
+                        taskHTML
+                    );
+
+                }
+
+                else if (
+                    status === "in_progress"
+                ) {
+
+                    inProgressContainer.insertAdjacentHTML(
+                        "beforeend",
+                        taskHTML
+                    );
+
+                }
+
+                else if (
+                    status === "done"
+                ) {
+
+                    doneContainer.insertAdjacentHTML(
+                        "beforeend",
+                        taskHTML
+                    );
+
+                }
+
+                else {
+
+                    console.warn(
+                        "Statut de tâche inconnu :",
+                        task.status,
+                        task
+                    );
+
+                }
 
             }
-
-            else if (
-                task.status === "inprogress" ||
-                task.status === "in_progress"
-            ) {
-
-                inProgressContainer.insertAdjacentHTML(
-                    "beforeend",
-                    taskHTML
-                );
-
-            }
-
-            else if (task.status === "done") {
-
-                doneContainer.insertAdjacentHTML(
-                    "beforeend",
-                    taskHTML
-                );
-
-            }
-
-        });
+        );
 
 
         /*
-         * Mettre à jour les compteurs
+         * ========================================================
+         * COMPTEURS
+         * ========================================================
          */
 
         const todoCount =
@@ -1183,10 +1313,12 @@ export const taskKanbanMixin = {
                 "todo-task-count"
             );
 
+
         const inProgressCount =
             document.getElementById(
                 "inprogress-task-count"
             );
+
 
         const doneCount =
             document.getElementById(
@@ -1194,13 +1326,34 @@ export const taskKanbanMixin = {
             );
 
 
+        const todoTasks =
+            tasks.filter(
+                task =>
+                    task.status === "todo"
+            );
+
+
+        const inProgressTasks =
+            tasks.filter(
+                task =>
+                    task.status === "inprogress" ||
+                    task.status === "in_progress" ||
+                    task.status === "progress"
+            );
+
+
+        const doneTasks =
+            tasks.filter(
+                task =>
+                    task.status === "done" ||
+                    task.status === "completed"
+            );
+
+
         if (todoCount) {
 
             todoCount.textContent =
-                tasks.filter(
-                    task =>
-                        task.status === "todo"
-                ).length;
+                todoTasks.length;
 
         }
 
@@ -1208,11 +1361,7 @@ export const taskKanbanMixin = {
         if (inProgressCount) {
 
             inProgressCount.textContent =
-                tasks.filter(
-                    task =>
-                        task.status === "inprogress" ||
-                        task.status === "in_progress"
-                ).length;
+                inProgressTasks.length;
 
         }
 
@@ -1220,20 +1369,20 @@ export const taskKanbanMixin = {
         if (doneCount) {
 
             doneCount.textContent =
-                tasks.filter(
-                    task =>
-                        task.status === "done"
-                ).length;
+                doneTasks.length;
 
         }
 
 
         /*
-         * Réactiver le drag & drop
-         * après le rendu des cartes
+         * Les événements sont délégués sur
+         * #project-kanban.
+         *
+         * Pas besoin de les rattacher
+         * à chaque nouvelle carte.
          */
 
-        this.initKanbanDragAndDrop(
+        this.bindTaskActionEvents(
             project
         );
 

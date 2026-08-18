@@ -1624,6 +1624,7 @@ export class ProjectController {
         this.render();
 
     }
+
 }
 
 // Ajout des méthodes "détails projet" et "Kanban / tâches" sur le prototype.

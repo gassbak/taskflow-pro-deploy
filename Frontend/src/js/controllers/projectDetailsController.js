@@ -522,9 +522,15 @@ export const projectDetailsMixin = {
 
     /*
      * Formulaire de création d'une tâche
+     *
+     * Le formulaire est géré par le module Kanban/Tâches.
      */
-
-    this.bindTaskFormEvents(project);
+    
+    if (typeof this.bindTaskFormEvents === "function") {
+    
+        this.bindTaskFormEvents(project);
+    
+    }
 
     },
 
