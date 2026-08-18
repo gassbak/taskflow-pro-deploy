@@ -1386,6 +1386,140 @@ export const taskKanbanMixin = {
             project
         );
 
+    },
+
+    openCreateTaskModal(project) {
+
+    const modal = document.querySelector("#task-modal");
+
+    if (!modal) {
+        console.error("❌ Modal de tâche introuvable");
+        return;
     }
+
+    // Réinitialiser le formulaire
+    const form = document.querySelector("#task-form");
+
+    if (form) {
+        form.reset();
+    }
+
+    // Valeurs par défaut
+    const priority = document.querySelector("#task-priority");
+
+    if (priority) {
+        priority.value = "medium";
+    }
+
+    // Mémoriser le projet courant
+    this.currentProject = project;
+
+    // Afficher la modal
+    modal.classList.remove("hidden");
+
+    this.bindTaskModalCloseEvents();
+
+    console.log("✅ Modal création tâche ouverte");
+    console.log("Projet :", project);
+},
+
+bindTaskFormEvents(project) {
+
+    const form = document.querySelector("#task-form");
+
+    if (!form) {
+        console.error("❌ #task-form introuvable");
+        return;
+    }
+
+    // Éviter de créer plusieurs listeners
+    if (form.dataset.eventsBound === "true") {
+        return;
+    }
+
+    form.dataset.eventsBound = "true";
+
+    form.addEventListener("submit", (event) => {
+
+        event.preventDefault();
+
+        const title = document.querySelector("#task-title")?.value.trim();
+        const description =
+            document.querySelector("#task-description")?.value.trim();
+
+        const priority =
+            document.querySelector("#task-priority")?.value;
+
+        const deadline =
+            document.querySelector("#task-deadline")?.value || null;
+
+        if (!title) {
+            alert("Veuillez saisir le titre de la tâche.");
+            return;
+        }
+
+        const currentProject = this.currentProject || project;
+
+        if (!currentProject) {
+            console.error("❌ Aucun projet sélectionné");
+            return;
+        }
+
+        const task = this.taskService.createTask({
+            projectId: currentProject.id,
+            title,
+            description,
+            priority,
+            deadline,
+            status: "todo"
+        });
+
+        console.log("✅ Tâche créée :", task);
+
+        // Fermer la modal
+        this.closeCreateTaskModal();
+
+        // Actualiser les tâches
+        if (typeof this.renderProjectTasks === "function") {
+            this.renderProjectTasks(currentProject);
+        }
+    });
+},
+
+closeCreateTaskModal() {
+
+    const modal = document.querySelector("#task-modal");
+
+    if (modal) {
+        modal.classList.add("hidden");
+    }
+},
+
+bindTaskModalCloseEvents() {
+
+    const closeButton =
+        document.querySelector("#close-task-modal");
+
+    const cancelButton =
+        document.querySelector("#cancel-task-modal");
+
+    if (closeButton && closeButton.dataset.eventsBound !== "true") {
+
+        closeButton.addEventListener("click", () => {
+            this.closeCreateTaskModal();
+        });
+
+        closeButton.dataset.eventsBound = "true";
+    }
+
+    if (cancelButton && cancelButton.dataset.eventsBound !== "true") {
+
+        cancelButton.addEventListener("click", () => {
+            this.closeCreateTaskModal();
+        });
+
+        cancelButton.dataset.eventsBound = "true";
+    }
+}
 
 };
