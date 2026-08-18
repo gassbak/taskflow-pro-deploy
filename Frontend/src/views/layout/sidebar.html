@@ -1,0 +1,553 @@
+<aside
+    id="sidebar"
+    class="
+        fixed
+        inset-y-0
+        left-0
+        z-40
+        flex
+        w-64
+        -translate-x-full
+        flex-col
+        border-r
+        border-slate-200
+        bg-white
+        transition-transform
+        duration-300
+        lg:translate-x-0
+        dark:border-slate-800
+        dark:bg-slate-950
+    "
+>
+
+    <!-- Logo -->
+
+    <div
+        class="
+            flex
+            h-20
+            shrink-0
+            items-center
+            border-b
+            border-slate-200
+            px-6
+            dark:border-slate-800
+        "
+    >
+
+        <div
+            class="
+                flex
+                items-center
+                gap-3
+            "
+        >
+
+            <!-- Logo -->
+
+            <div
+                class="
+                    flex
+                    h-10
+                    w-10
+                    items-center
+                    justify-center
+                    rounded-xl
+                    bg-indigo-600
+                    text-lg
+                    font-bold
+                    text-white
+                    shadow-sm
+                "
+            >
+                T
+            </div>
+
+
+            <div>
+
+                <h1
+                    class="
+                        text-lg
+                        font-bold
+                        tracking-tight
+                        text-slate-900
+                        dark:text-white
+                    "
+                >
+                    TaskFlow
+                </h1>
+
+                <p
+                    class="
+                        text-xs
+                        text-slate-500
+                        dark:text-slate-400
+                    "
+                >
+                    Pro
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Navigation -->
+
+    <nav
+        class="
+            flex-1
+            overflow-y-auto
+            px-4
+            py-6
+        "
+    >
+
+        <!-- Principal -->
+
+        <div class="mb-8">
+
+            <p
+                class="
+                    mb-3
+                    px-3
+                    text-[11px]
+                    font-semibold
+                    uppercase
+                    tracking-wider
+                    text-slate-400
+                "
+            >
+                Principal
+            </p>
+
+
+            <div class="space-y-1">
+
+                <!-- Dashboard -->
+
+                <a
+        
+                      href="#"
+                      data-page="dashboard"
+                      class="sidebar-link
+                        flex
+                        items-center
+                        gap-3
+                        rounded-xl
+                        bg-indigo-50
+                        px-3
+                        py-3
+                        text-sm
+                        font-semibold
+                        text-indigo-700
+                        transition
+                        dark:bg-indigo-500/10
+                        dark:text-indigo-400
+                    "
+                >
+
+                    <span
+                        class="
+                            flex
+                            h-8
+                            w-8
+                            items-center
+                            justify-center
+                            rounded-lg
+                            bg-indigo-100
+                            dark:bg-indigo-500/20
+                        "
+                    >
+                        📊
+                    </span>
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </a>
+
+
+                <!-- Projets -->
+
+                <a
+                        href="#"
+                        data-page="projects"
+                        class="
+                        sidebar-link
+                        flex
+                        items-center
+                        gap-3
+                        rounded-xl
+                        px-3
+                        py-3
+                        text-sm
+                        font-medium
+                        text-slate-600
+                        transition
+                        hover:bg-slate-100
+                        hover:text-slate-900
+                        dark:text-slate-300
+                        dark:hover:bg-slate-800
+                        dark:hover:text-white
+                    "
+                >
+
+                    <span
+                        class="
+                            flex
+                            h-8
+                            w-8
+                            items-center
+                            justify-center
+                            rounded-lg
+                            bg-slate-100
+                            dark:bg-slate-800
+                        "
+                    >
+                        📁
+                    </span>
+
+                    <span>
+                        Projets
+                    </span>
+
+                </a>
+
+
+                <!-- Kanban -->
+
+                <a
+                        href="#"
+                        data-page="kanban"
+                        class="
+                        sidebar-link
+                        flex
+                        items-center
+                        gap-3
+                        rounded-xl
+                        px-3
+                        py-3
+                        text-sm
+                        font-medium
+                        text-slate-600
+                        transition
+                        hover:bg-slate-100
+                        hover:text-slate-900
+                        dark:text-slate-300
+                        dark:hover:bg-slate-800
+                        dark:hover:text-white
+                    "
+                >
+
+                    <span
+                        class="
+                            flex
+                            h-8
+                            w-8
+                            items-center
+                            justify-center
+                            rounded-lg
+                            bg-slate-100
+                            dark:bg-slate-800
+                        "
+                    >
+                        📋
+                    </span>
+
+                    <span>
+                        Kanban
+                    </span>
+
+                </a>
+
+
+                <!-- Members -->
+
+                <a
+                    href="#"
+                    data-page="members"
+                    class="
+                        sidebar-link
+                        flex
+                        items-center
+                        gap-3
+                        rounded-xl
+                        px-3
+                        py-3
+                        text-sm
+                        font-medium
+                        text-slate-600
+                        transition
+                        hover:bg-slate-100
+                        hover:text-slate-900
+                        dark:text-slate-300
+                        dark:hover:bg-slate-800
+                        dark:hover:text-white
+                    "
+                >
+
+                    <span
+                        class="
+                            flex
+                            h-8
+                            w-8
+                            items-center
+                            justify-center
+                            rounded-lg
+                            bg-slate-100
+                            dark:bg-slate-800
+                        "
+                    >
+                        👥
+                    </span>
+
+                    <span>
+                        Members
+                    </span>
+
+                </a>
+
+
+                <!-- Notifications -->
+
+                <a
+                    href="#"
+                    data-page="notifications"
+                    class="
+                        sidebar-link
+                        flex
+                        items-center
+                        justify-between
+                        rounded-xl
+                        px-3
+                        py-3
+                        text-sm
+                        font-medium
+                        text-slate-600
+                        transition
+                        hover:bg-slate-100
+                        hover:text-slate-900
+                        dark:text-slate-300
+                        dark:hover:bg-slate-800
+                        dark:hover:text-white
+                    "
+                >
+
+                    <div
+                        class="
+                            flex
+                            items-center
+                            gap-3
+                        "
+                    >
+
+                        <span
+                            class="
+                                flex
+                                h-8
+                                w-8
+                                items-center
+                                justify-center
+                                rounded-lg
+                                bg-slate-100
+                                dark:bg-slate-800
+                            "
+                        >
+                            🔔
+                        </span>
+
+                        <span>
+                            Notifications
+                        </span>
+
+                    </div>
+
+
+                    <span
+                        class="
+                            flex
+                            h-5
+                            min-w-5
+                            items-center
+                            justify-center
+                            rounded-full
+                            bg-red-500
+                            px-1.5
+                            text-[10px]
+                            font-bold
+                            text-white
+                        "
+                    >
+                        3
+                    </span>
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- Système -->
+
+        <div>
+
+            <p
+                class="
+                    mb-3
+                    px-3
+                    text-[11px]
+                    font-semibold
+                    uppercase
+                    tracking-wider
+                    text-slate-400
+                "
+            >
+                Système
+            </p>
+
+
+            <div class="space-y-1">
+
+                <!-- Paramètres -->
+
+                <a
+                    href="#"
+                    data-page="settings"
+                    class="
+                        sidebar-link
+                        flex
+                        items-center
+                        gap-3
+                        rounded-xl
+                        px-3
+                        py-3
+                        text-sm
+                        font-medium
+                        text-slate-600
+                        transition
+                        hover:bg-slate-100
+                        hover:text-slate-900
+                        dark:text-slate-300
+                        dark:hover:bg-slate-800
+                        dark:hover:text-white
+                    "
+                >
+
+                    <span
+                        class="
+                            flex
+                            h-8
+                            w-8
+                            items-center
+                            justify-center
+                            rounded-lg
+                            bg-slate-100
+                            dark:bg-slate-800
+                        "
+                    >
+                        ⚙️
+                    </span>
+
+                    <span>
+                        Paramètres
+                    </span>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- Profil -->
+
+    <div
+        class="
+            shrink-0
+            border-t
+            border-slate-200
+            p-4
+            dark:border-slate-800
+        "
+    >
+
+        <button
+            id="sidebar-profile-button"
+            type="button"
+            data-page="profile"
+            class="
+                flex
+                w-full
+                items-center
+                gap-3
+                rounded-xl
+                p-2
+                text-left
+                transition
+                hover:bg-slate-100
+                dark:hover:bg-slate-800
+            "
+        >
+
+            <div
+                data-user-initials
+                class="
+                    flex
+                    h-10
+                    w-10
+                    shrink-0
+                    items-center
+                    justify-center
+                    rounded-full
+                    bg-indigo-100
+                    font-bold
+                    text-indigo-700
+                    dark:bg-indigo-500/20
+                    dark:text-indigo-400
+                "
+            >
+                ?
+            </div>
+
+
+            <div class="min-w-0">
+
+                <p
+                    data-user-name
+                    class="
+                        truncate
+                        text-sm
+                        font-semibold
+                        text-slate-900
+                        dark:text-white
+                    "
+                >
+                    Utilisateur
+                </p>
+
+                <p
+                    class="
+                        truncate
+                        text-xs
+                        text-slate-500
+                        dark:text-slate-400
+                    "
+                >
+                    Membre TaskFlow
+                </p>
+
+            </div>
+
+        </button>
+
+    </div>
+
+</aside>

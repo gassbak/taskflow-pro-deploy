@@ -1,0 +1,569 @@
+<div
+    id="project-modal"
+    class="
+        fixed
+        inset-0
+        z-50
+        hidden
+        items-center
+        justify-center
+        bg-slate-950/60
+        p-4
+        backdrop-blur-sm
+    "
+>
+
+    <!-- Modal -->
+
+    <div
+
+    class="
+        flex
+        w-full
+        max-w-lg
+        max-h-[90vh]
+        flex-col
+        overflow-hidden
+        rounded-2xl
+        border
+        border-slate-200
+        bg-white
+        shadow-2xl
+        dark:border-slate-800
+        dark:bg-slate-900
+    "
+     >
+
+        <!-- Header -->
+
+        <div
+            class="
+                flex
+                items-center
+                justify-between
+                border-b
+                border-slate-200
+                px-6
+                py-5
+                dark:border-slate-800
+            "
+        >
+
+            <div>
+
+                <h2
+                    id="project-modal-title"
+                    class="
+                        text-lg
+                        font-bold
+                        text-slate-900
+                        dark:text-white
+                    "
+                >
+                    Nouveau projet
+                </h2>
+
+                <p
+                    class="
+                        mt-1
+                        text-xs
+                        text-slate-500
+                        dark:text-slate-400
+                    "
+                >
+                    Créez un nouveau projet.
+                </p>
+
+            </div>
+
+
+            <button
+                id="close-project-modal"
+                type="button"
+                class="
+                    flex
+                    h-9
+                    w-9
+                    items-center
+                    justify-center
+                    rounded-lg
+                    text-xl
+                    text-slate-400
+                    transition
+                    hover:bg-slate-100
+                    hover:text-slate-700
+                    dark:hover:bg-slate-800
+                    dark:hover:text-white
+                "
+                aria-label="Fermer"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <!-- Formulaire -->
+
+        <form
+            id="project-form"
+                class="
+        min-h-0
+        flex-1
+        overflow-y-auto
+        p-6
+    "
+        >
+
+            <!-- Nom -->
+
+            <div>
+
+                <label
+                    for="project-name"
+                    class="
+                        mb-2
+                        block
+                        text-sm
+                        font-semibold
+                        text-slate-700
+                        dark:text-slate-200
+                    "
+                >
+                    Nom du projet
+                    <span class="text-red-500">*</span>
+                </label>
+
+                <input
+                    id="project-name"
+                    name="name"
+                    type="text"
+                    placeholder="Ex : Refonte du site web"
+                    required
+                    maxlength="100"
+                    class="
+                        h-11
+                        w-full
+                        rounded-xl
+                        border
+                        border-slate-200
+                        bg-slate-50
+                        px-4
+                        text-sm
+                        text-slate-900
+                        outline-none
+                        transition
+                        focus:border-indigo-500
+                        focus:ring-2
+                        focus:ring-indigo-500/20
+                        dark:border-slate-700
+                        dark:bg-slate-950
+                        dark:text-white
+                    "
+                >
+
+                <p
+                    id="project-name-error"
+                    class="
+                        mt-1
+                        hidden
+                        text-xs
+                        text-red-500
+                    "
+                ></p>
+
+            </div>
+
+
+            <!-- Description -->
+
+            <div>
+
+                <label
+                    for="project-description"
+                    class="
+                        mb-2
+                        block
+                        text-sm
+                        font-semibold
+                        text-slate-700
+                        dark:text-slate-200
+                    "
+                >
+                    Description
+                </label>
+
+                <textarea
+                    id="project-description"
+                    name="description"
+                    rows="4"
+                    maxlength="500"
+                    placeholder="Décrivez brièvement votre projet..."
+                    class="
+                        w-full
+                        resize-none
+                        rounded-xl
+                        border
+                        border-slate-200
+                        bg-slate-50
+                        px-4
+                        py-3
+                        text-sm
+                        text-slate-900
+                        outline-none
+                        transition
+                        focus:border-indigo-500
+                        focus:ring-2
+                        focus:ring-indigo-500/20
+                        dark:border-slate-700
+                        dark:bg-slate-950
+                        dark:text-white
+                    "
+                ></textarea>
+
+                <div
+                    class="
+                        mt-1
+                        flex
+                        justify-end
+                    "
+                >
+
+                    <span
+                        id="description-counter"
+                        class="
+                            text-xs
+                            text-slate-400
+                        "
+                    >
+                        0/500
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div>
+    <label
+        for="project-deadline"
+        class="block text-sm font-medium text-slate-700 dark:text-slate-300"
+    >
+        Deadline du projet
+    </label>
+
+    <input
+        type="date"
+        id="project-deadline"
+        name="deadline"
+        class="
+            mt-2
+            w-full
+            rounded-xl
+            border
+            border-slate-300
+            bg-white
+            px-4
+            py-3
+            text-sm
+            text-slate-900
+            outline-none
+            transition
+            focus:border-indigo-500
+            focus:ring-2
+            focus:ring-indigo-500/20
+            dark:border-slate-700
+            dark:bg-slate-800
+            dark:text-white
+        "
+    >
+</div>
+
+            <!-- Couleur -->
+
+            <div>
+
+                <p
+                    class="
+                        mb-3
+                        text-sm
+                        font-semibold
+                        text-slate-700
+                        dark:text-slate-200
+                    "
+                >
+                    Couleur du projet
+                </p>
+
+
+                <div
+                    class="
+                        flex
+                        flex-wrap
+                        gap-3
+                    "
+                >
+
+                    <label class="cursor-pointer">
+
+                        <input
+                            type="radio"
+                            name="color"
+                            value="indigo"
+                            class="peer sr-only"
+                            checked
+                        >
+
+                        <span
+                            class="
+                                flex
+                                h-10
+                                w-10
+                                items-center
+                                justify-center
+                                rounded-full
+                                bg-indigo-500
+                                ring-4
+                                ring-transparent
+                                transition
+                                peer-checked:ring-indigo-200
+                            "
+                        ></span>
+
+                    </label>
+
+
+                    <label class="cursor-pointer">
+
+                        <input
+                            type="radio"
+                            name="color"
+                            value="violet"
+                            class="peer sr-only"
+                        >
+
+                        <span
+                            class="
+                                flex
+                                h-10
+                                w-10
+                                items-center
+                                justify-center
+                                rounded-full
+                                bg-violet-500
+                                ring-4
+                                ring-transparent
+                                transition
+                                peer-checked:ring-violet-200
+                            "
+                        ></span>
+
+                    </label>
+
+
+                    <label class="cursor-pointer">
+
+                        <input
+                            type="radio"
+                            name="color"
+                            value="emerald"
+                            class="peer sr-only"
+                        >
+
+                        <span
+                            class="
+                                flex
+                                h-10
+                                w-10
+                                items-center
+                                justify-center
+                                rounded-full
+                                bg-emerald-500
+                                ring-4
+                                ring-transparent
+                                transition
+                                peer-checked:ring-emerald-200
+                            "
+                        ></span>
+
+                    </label>
+
+
+                    <label class="cursor-pointer">
+
+                        <input
+                            type="radio"
+                            name="color"
+                            value="orange"
+                            class="peer sr-only"
+                        >
+
+                        <span
+                            class="
+                                flex
+                                h-10
+                                w-10
+                                items-center
+                                justify-center
+                                rounded-full
+                                bg-orange-500
+                                ring-4
+                                ring-orange-200
+                                transition
+                                peer-checked:ring-orange-300
+                            "
+                        ></span>
+
+                    </label>
+
+
+                    <label class="cursor-pointer">
+
+                        <input
+                            type="radio"
+                            name="color"
+                            value="rose"
+                            class="peer sr-only"
+                        >
+
+                        <span
+                            class="
+                                flex
+                                h-10
+                                w-10
+                                items-center
+                                justify-center
+                                rounded-full
+                                bg-rose-500
+                                ring-4
+                                ring-transparent
+                                transition
+                                peer-checked:ring-rose-200
+                            "
+                        ></span>
+
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <!-- Statut -->
+
+            <div>
+
+                <label
+                    for="project-status"
+                    class="
+                        mb-2
+                        block
+                        text-sm
+                        font-semibold
+                        text-slate-700
+                        dark:text-slate-200
+                    "
+                >
+                    Statut
+                </label>
+
+                <select
+                    id="project-status"
+                    name="status"
+                    class="
+                        h-11
+                        w-full
+                        rounded-xl
+                        border
+                        border-slate-200
+                        bg-slate-50
+                        px-4
+                        text-sm
+                        outline-none
+                        focus:border-indigo-500
+                        focus:ring-2
+                        focus:ring-indigo-500/20
+                        dark:border-slate-700
+                        dark:bg-slate-950
+                        dark:text-white
+                    "
+                >
+
+                    <option value="active">
+                        Actif
+                    </option>
+
+                    <option value="archived">
+                        Archivé
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- Actions -->
+
+            <div
+                class="
+                    flex
+                    justify-end
+                    gap-3
+                    border-t
+                    border-slate-200
+                    pt-5
+                    dark:border-slate-800
+                "
+            >
+
+                <button
+                    id="cancel-project-modal"
+                    type="button"
+                    class="
+                        rounded-xl
+                        border
+                        border-slate-200
+                        px-4
+                        py-2.5
+                        text-sm
+                        font-semibold
+                        text-slate-700
+                        transition
+                        hover:bg-slate-100
+                        dark:border-slate-700
+                        dark:text-slate-200
+                        dark:hover:bg-slate-800
+                    "
+                >
+                    Annuler
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="
+                        rounded-xl
+                        bg-indigo-600
+                        px-5
+                        py-2.5
+                        text-sm
+                        font-semibold
+                        text-white
+                        shadow-sm
+                        transition
+                        hover:bg-indigo-700
+                        focus:outline-none
+                        focus:ring-2
+                        focus:ring-indigo-500
+                        focus:ring-offset-2
+                    "
+                >
+                    Créer le projet
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

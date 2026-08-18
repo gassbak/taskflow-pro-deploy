@@ -1,0 +1,716 @@
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Details</title>
+        <link
+        rel="stylesheet"
+        href="./src/css/output.css"
+    >
+ </head>
+ <body>
+   
+    <section
+    id="project-details-page"
+    class="space-y-6"
+>
+
+    <!-- Retour -->
+
+    <div>
+
+        <button
+            id="back-to-projects"
+            
+            type="button"
+            class="
+                inline-flex
+                items-center
+                gap-2
+                rounded-lg
+                px-3
+                py-2
+                text-sm
+                font-medium
+                text-slate-600
+                transition
+                hover:bg-slate-100
+                hover:text-slate-900
+                dark:text-slate-400
+                dark:hover:bg-slate-800
+                dark:hover:text-white
+            "
+        >
+            <span>←</span>
+
+            <span>
+                Retour aux projets
+            </span>
+        </button>
+
+    </div>
+
+
+    <!-- En-tête du projet -->
+
+    <div
+        id="project-details-header"
+        class="
+            overflow-hidden
+            rounded-2xl
+            border
+            border-slate-200
+            bg-white
+            shadow-sm
+            dark:border-slate-800
+            dark:bg-slate-900
+        "
+    >
+
+        <!-- Bandeau couleur -->
+
+        <div
+            id="project-color-bar"
+            class="h-2 bg-indigo-500"
+        ></div>
+
+
+        <div class="p-6">
+
+            <div
+                class="
+                    flex
+                    flex-col
+                    gap-6
+                    lg:flex-row
+                    lg:items-start
+                    lg:justify-between
+                "
+            >
+
+                <!-- Informations principales -->
+
+                <div
+                    class="
+                        flex
+                        items-start
+                        gap-4
+                    "
+                >
+
+                    <div
+                        id="project-icon"
+                        class="
+                            flex
+                            h-14
+                            w-14
+                            shrink-0
+                            items-center
+                            justify-center
+                            rounded-2xl
+                            bg-indigo-50
+                            text-2xl
+                            dark:bg-indigo-500/10
+                        "
+                    >
+                        📁
+                    </div>
+
+
+                    <div>
+
+                        <div
+                            class="
+                                flex
+                                flex-wrap
+                                items-center
+                                gap-3
+                            "
+                        >
+
+                            <h1
+                                id="project-details-name"
+                                class="
+                                    text-2xl
+                                    font-bold
+                                    text-slate-900
+                                    dark:text-white
+                                "
+                            >
+                                Projet
+                            </h1>
+
+
+                            <span
+                                id="project-details-status"
+                                
+                                class="
+                                    rounded-full
+                                    bg-emerald-50
+                                    px-3
+                                    py-1
+                                    text-xs
+                                    font-semibold
+                                    text-emerald-700
+                                    dark:bg-emerald-500/10
+                                    dark:text-emerald-400
+                                "
+                            >
+                                Actif
+                            </span>
+
+                        </div>
+
+
+                        <p
+                            id="project-details-description"
+                            class="
+                                mt-2
+                                max-w-2xl
+                                text-sm
+                                leading-6
+                                text-slate-500
+                                dark:text-slate-400
+                            "
+                        >
+                            Description du projet.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Actions -->
+
+                <div
+                    class="
+                        flex
+                        flex-wrap
+                        gap-2
+                    "
+                >
+
+                    <button
+                        id="edit-project-details"
+                        type="button"
+                        class="
+                            inline-flex
+                            items-center
+                            gap-2
+                            rounded-xl
+                            border
+                            border-slate-200
+                            px-4
+                            py-2.5
+                            text-sm
+                            font-semibold
+                            text-slate-700
+                            transition
+                            hover:bg-slate-100
+                            dark:border-slate-700
+                            dark:text-slate-200
+                            dark:hover:bg-slate-800
+                        "
+                    >
+                        ✏️
+                        Modifier
+                    </button>
+
+
+                    <button
+                        id="archive-project-details"
+                        type="button"
+                        class="
+                            inline-flex
+                            items-center
+                            gap-2
+                            rounded-xl
+                            bg-amber-500
+                            px-4
+                            py-2.5
+                            text-sm
+                            font-semibold
+                            text-white
+                            transition
+                            hover:bg-amber-600
+                        "
+                    >
+                        📦
+                        Archiver
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Informations -->
+
+    <div
+        class="
+            grid
+            grid-cols-1
+            gap-4
+            md:grid-cols-3
+        "
+    >
+
+        <!-- Création -->
+
+        <div
+            class="
+                rounded-2xl
+                border
+                border-slate-200
+                bg-white
+                p-5
+                dark:border-slate-800
+                dark:bg-slate-900
+            "
+        >
+
+            <p
+                class="
+                    text-xs
+                    font-medium
+                    uppercase
+                    tracking-wide
+                    text-slate-400
+                "
+            >
+                Créé le
+            </p>
+
+            <p
+                id="project-created-at"
+                class="
+                    mt-2
+                    text-sm
+                    font-semibold
+                    text-slate-900
+                    dark:text-white
+                "
+            >
+                —
+            </p>
+
+        </div>
+
+
+        <!-- Modification -->
+
+        <div
+            class="
+                rounded-2xl
+                border
+                border-slate-200
+                bg-white
+                p-5
+                dark:border-slate-800
+                dark:bg-slate-900
+            "
+        >
+
+            <p
+                class="
+                    text-xs
+                    font-medium
+                    uppercase
+                    tracking-wide
+                    text-slate-400
+                "
+            >
+                Dernière modification
+            </p>
+
+            <p
+                id="project-updated-at"
+                class="
+                    mt-2
+                    text-sm
+                    font-semibold
+                    text-slate-900
+                    dark:text-white
+                "
+            >
+                —
+            </p>
+
+        </div>
+
+
+        <!-- Tâches -->
+
+        <div
+            class="
+                rounded-2xl
+                border
+                border-slate-200
+                bg-white
+                p-5
+                dark:border-slate-800
+                dark:bg-slate-900
+            "
+        >
+
+            <p
+                class="
+                    text-xs
+                    font-medium
+                    uppercase
+                    tracking-wide
+                    text-slate-400
+                "
+            >
+                Tâches
+            </p>
+
+            <p
+                id="project-task-count"
+                class="
+                    mt-2
+                    text-sm
+                    font-semibold
+                    text-slate-900
+                    dark:text-white
+                "
+            >
+                0 tâche
+            </p>
+
+        </div>
+
+
+        <!-- Deadline du projet -->
+
+<section
+    class="
+        rounded-2xl
+        border
+        border-slate-200
+        bg-white
+        p-6
+        shadow-sm
+        dark:border-slate-800
+        dark:bg-slate-900
+    "
+>
+
+    <h2
+        class="
+            text-lg
+            font-bold
+            text-slate-900
+            dark:text-white
+        "
+    >
+        Deadline du projet
+    </h2>
+
+    <div
+        id="project-deadline"
+        class="mt-4"
+    ></div>
+
+</section>
+
+    </div>
+
+
+    <!-- Section tâches -->
+
+    <div
+        class="
+            rounded-2xl
+            border
+            border-slate-200
+            bg-white
+            shadow-sm
+            dark:border-slate-800
+            dark:bg-slate-900
+        "
+    >
+
+        <div
+            class="
+                flex
+                flex-col
+                gap-3
+                border-b
+                border-slate-200
+                p-6
+                sm:flex-row
+                sm:items-center
+                sm:justify-between
+                dark:border-slate-800
+            "
+        >
+
+            <div>
+
+                <h2
+                    class="
+                        text-lg
+                        font-bold
+                        text-slate-900
+                        dark:text-white
+                    "
+                >
+                    Tâches du projet
+                </h2>
+
+                <p
+                    class="
+                        mt-1
+                        text-sm
+                        text-slate-500
+                        dark:text-slate-400
+                    "
+                >
+                    Les tâches associées à ce projet apparaîtront ici.
+                </p>
+
+            </div>
+
+
+            <button
+                id="add-task-to-project"
+                type="button"
+                class="
+                    inline-flex
+                    items-center
+                    justify-center
+                    gap-2
+                    rounded-xl
+                    bg-indigo-600
+                    px-4
+                    py-2.5
+                    text-sm
+                    font-semibold
+                    text-white
+                    transition
+                    hover:bg-indigo-700
+                "
+            >
+                +
+                Ajouter une tâche
+            </button>
+
+        </div>
+
+
+        <!-- Zone future des tâches -->
+
+<div
+    id="project-kanban"
+    class="
+        grid
+        grid-cols-1
+        gap-6
+        md:grid-cols-3
+    "
+>
+
+    <!-- À FAIRE -->
+
+    <div
+        class="
+            rounded-xl
+            border
+            border-slate-200
+            bg-slate-50
+            p-4
+            dark:border-slate-800
+            dark:bg-slate-900/50
+        "
+    >
+
+        <div
+            class="
+                mb-4
+                flex
+                items-center
+                justify-between
+            "
+        >
+
+            <h3
+                class="
+                    font-semibold
+                    text-slate-900
+                    dark:text-white
+                "
+            >
+                À faire
+            </h3>
+
+            <span
+                id="todo-task-count"
+                class="
+                    rounded-full
+                    bg-slate-200
+                    px-2
+                    py-1
+                    text-xs
+                    font-semibold
+                    text-slate-600
+                    dark:bg-slate-800
+                    dark:text-slate-300
+                "
+            >
+                0
+            </span>
+
+        </div>
+
+
+<div
+    id="todo-tasks"
+    class="task-drop-zone min-h-[100px] space-y-3"
+></div>
+
+    </div>
+
+
+    <!-- EN COURS -->
+
+    <div
+        class="
+            rounded-xl
+            border
+            border-slate-200
+            bg-slate-50
+            p-4
+            dark:border-slate-800
+            dark:bg-slate-900/50
+        "
+    >
+
+        <div
+            class="
+                mb-4
+                flex
+                items-center
+                justify-between
+            "
+        >
+
+            <h3
+                class="
+                    font-semibold
+                    text-slate-900
+                    dark:text-white
+                "
+            >
+                En cours
+            </h3>
+
+            <span
+                id="inprogress-task-count"
+                class="
+                    rounded-full
+                    bg-slate-200
+                    px-2
+                    py-1
+                    text-xs
+                    font-semibold
+                    text-slate-600
+                    dark:bg-slate-800
+                    dark:text-slate-300
+                "
+            >
+                0
+            </span>
+
+        </div>
+
+
+<div
+    id="inprogress-tasks"
+    class="task-drop-zone min-h-[100px] space-y-3"
+></div>
+
+    </div>
+
+
+    <!-- TERMINÉES -->
+
+    <div
+        class="
+            rounded-xl
+            border
+            border-slate-200
+            bg-slate-50
+            p-4
+            dark:border-slate-900
+            dark:bg-slate-900/50
+        "
+    >
+
+        <div
+            class="
+                mb-4
+                flex
+                items-center
+                justify-between
+            "
+        >
+
+            <h3
+                class="
+                    font-semibold
+                    text-slate-900
+                    dark:text-white
+                "
+            >
+                Terminées
+            </h3>
+
+            <span
+                id="done-task-count"
+                class="
+                    rounded-full
+                    bg-slate-200
+                    px-2
+                    py-1
+                    text-xs
+                    font-semibold
+                    text-slate-600
+                    dark:bg-slate-800
+                    dark:text-slate-300
+                "
+            >
+                0
+            </span>
+
+        </div>
+
+
+<div
+    id="done-tasks"
+    class="task-drop-zone min-h-[100px] space-y-3"
+></div>
+
+    </div>
+
+</div>
+
+        
+
+    </div>
+
+</section> 
+
+<!-- Formulaire d'ajout de tâche -->
+<div id="task-modal-container"></div>
+
+ </body>
+ </html>
+ 
+ 

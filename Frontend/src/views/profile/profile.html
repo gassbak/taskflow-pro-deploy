@@ -1,0 +1,249 @@
+<section
+    id="profile-page"
+    class="space-y-6"
+>
+
+    <!-- En-tête -->
+
+    <div>
+
+        <p
+            class="
+                text-sm
+                font-medium
+                text-indigo-600
+                dark:text-indigo-400
+            "
+        >
+            Compte
+        </p>
+
+        <h1
+            class="
+                mt-1
+                text-2xl
+                font-bold
+                text-slate-900
+                dark:text-white
+            "
+        >
+            Mon profil
+        </h1>
+
+        <p
+            class="
+                mt-2
+                text-sm
+                text-slate-500
+                dark:text-slate-400
+            "
+        >
+            Gérez vos informations personnelles.
+        </p>
+
+    </div>
+
+
+    <!-- Carte profil -->
+
+    <div
+        class="
+            rounded-2xl
+            border
+            border-slate-200
+            bg-white
+            p-6
+            shadow-sm
+            dark:border-slate-800
+            dark:bg-slate-900
+        "
+    >
+
+        <!-- Avatar + nom actuel -->
+
+        <div
+            class="
+                mb-6
+                flex
+                items-center
+                gap-4
+            "
+        >
+
+            <div
+                id="profile-avatar"
+                class="
+                    flex
+                    h-16
+                    w-16
+                    shrink-0
+                    items-center
+                    justify-center
+                    rounded-full
+                    bg-indigo-100
+                    text-xl
+                    font-bold
+                    text-indigo-700
+                    dark:bg-indigo-500/20
+                    dark:text-indigo-400
+                "
+            >
+                ?
+            </div>
+
+            <div>
+
+                <p
+                    id="profile-current-name"
+                    class="
+                        text-lg
+                        font-bold
+                        text-slate-900
+                        dark:text-white
+                    "
+                >
+                    Utilisateur
+                </p>
+
+                <p
+                    id="profile-current-email"
+                    class="
+                        text-sm
+                        text-slate-500
+                        dark:text-slate-400
+                    "
+                >
+                    Aucun email renseigné
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Formulaire -->
+
+        <form
+            id="profile-form"
+            class="space-y-4"
+        >
+
+            <div>
+
+                <label
+                    for="profile-name"
+                    class="
+                        mb-1
+                        block
+                        text-sm
+                        font-semibold
+                        text-slate-700
+                        dark:text-slate-300
+                    "
+                >
+                    Nom complet
+                </label>
+
+                <input
+                    id="profile-name"
+                    name="name"
+                    type="text"
+                    maxlength="60"
+                    placeholder="Votre nom"
+                    class="
+                        w-full
+                        rounded-xl
+                        border
+                        border-slate-200
+                        bg-white
+                        px-4
+                        py-3
+                        text-sm
+                        outline-none
+                        transition
+                        focus:border-indigo-500
+                        focus:ring-2
+                        focus:ring-indigo-500/20
+                        dark:border-slate-700
+                        dark:bg-slate-800
+                        dark:text-white
+                    "
+                >
+
+            </div>
+
+            <div>
+
+                <label
+                    for="profile-email"
+                    class="
+                        mb-1
+                        block
+                        text-sm
+                        font-semibold
+                        text-slate-700
+                        dark:text-slate-300
+                    "
+                >
+                    Email
+                </label>
+
+                <input
+                    id="profile-email"
+                    name="email"
+                    type="email"
+                    placeholder="vous@exemple.com"
+                    class="
+                        w-full
+                        rounded-xl
+                        border
+                        border-slate-200
+                        bg-white
+                        px-4
+                        py-3
+                        text-sm
+                        outline-none
+                        transition
+                        focus:border-indigo-500
+                        focus:ring-2
+                        focus:ring-indigo-500/20
+                        dark:border-slate-700
+                        dark:bg-slate-800
+                        dark:text-white
+                    "
+                >
+
+            </div>
+
+            <p
+                id="profile-error"
+                class="hidden text-sm text-red-600 dark:text-red-400"
+            ></p>
+
+            <div class="flex justify-end">
+
+                <button
+                    id="save-profile"
+                    type="submit"
+                    class="
+                        rounded-xl
+                        bg-indigo-600
+                        px-5
+                        py-3
+                        text-sm
+                        font-semibold
+                        text-white
+                        transition
+                        hover:bg-indigo-700
+                    "
+                >
+                    Enregistrer le profil
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</section>
